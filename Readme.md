@@ -7,7 +7,7 @@ Full-Stack system designed for product price tracking, analysis, and monitoring 
 ### Backend
 - **Python 3.15** & **Django / Django Ninja** — Fast, asynchronous, and typed REST API.
 - **PyJWT** — Secure authentication via JSON Web Tokens.
-- **SQLite** — Relational database for persistence.
+- **Postgres** — Relational database for persistence.
 - **Django Mail** — Transactional email delivery and verification codes.
 
 ### Frontend
