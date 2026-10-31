@@ -1,0 +1,14 @@
+annotated-types==0.8.0
+asgiref==3.13.0
+bcrypt==5.0.0
+Django==6.1.2
+django-cors-headers==4.9.0
+django-environ==0.14.0
+django-ninja==1.7.3
+pillow==13.0.0
+pydantic==2.14.2
+pydantic_core==2.50.2
+PyJWT==2.15.1
+sqlparse==0.6.0
+typing-inspection==0.4.4
+typing_extensions==4.16.0
