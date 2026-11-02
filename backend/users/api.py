@@ -11,8 +11,21 @@ from django.utils.html import strip_tags
 import jwt
 from django.conf import settings
 
+# Check if the email has a correct format
+def check_email(email):
+    if (email.count("@") != 1):
+        return False
+    name_email = email.split("@")[0]
+    domain_email = email.split("@")[1].split(".")[0]
+
+    if (domain_email == "" or email.count(".") < 1 or email.count(".") > 2):
+        return False
+    
+    domain_extension = email.split("@")[1].split(".")[1]
+    return not (domain_extension == "" or name_email == "")
+
 # Send the email containing the code to the user's email address
-def send_verification_email(user_email: str, code: str):
+def send_verification_email(user_email, code):
     subject = "Código de verificación - Track your products"
     from_email = None # We set it to None so that it uses the default value from settings.py
     to = [user_email]
@@ -49,14 +62,14 @@ def send_verification_email(user_email: str, code: str):
 
 # Generate and send the verification code via email so you can confirm your identity
 def create_verificate_code(user):
-    if (Verification.objects.filter(id_user = user).exists()):
-        Verification.objects.get(id_user = user).delete()
+    if (Verification.objects.filter(user = user).exists()):
+        Verification.objects.get(user = user).delete()
     code_verification = randint(100000,999999)
 
     expire_date = timezone.now() + timedelta(minutes=15)
 
     Verification.objects.create(
-        id_user = user,
+        user = user,
         code = code_verification,
         expires_at = expire_date,
     )
@@ -65,14 +78,31 @@ def create_verificate_code(user):
 
 api = NinjaAPI()
 
-# Use a GET request to determine whether that username or email exists
+# Use a GET request to determine whether that username or email exists and if the email has a correct format
 @api.get("/exist")
-def is_exist(request, type, check):
+def is_exist(request, username, email):
+    is_username_exist = User.objects.filter(username = username).exists()
+    is_email_exist = User.objects.filter(email = email).exists()
+    is_success = True
+    message_error = ""
 
-    if (type == "username"):
-        return User.objects.filter(username = check).exists()
-    else:
-        return User.objects.filter(email = check).exists()
+    if (is_username_exist and is_email_exist):
+        message_error = "El usuario y el correo ya existen"
+        is_success = False
+    elif (is_username_exist):
+        message_error = "El usuario ya existe"
+        is_success = False
+    elif (is_email_exist):
+        message_error = "El correo ya existe"
+        is_success = False
+    elif (not check_email(email)):
+        is_success = False
+        message_error = "El correo no tiene un formato correcto"
+
+    return {
+        "success": is_success,
+        "error": message_error
+    }
 
 # POST request to register users and send the verification code
 @api.post("/register", response=ResponseSchema)
@@ -110,9 +140,14 @@ def verificate_user(request, sendcode):
         verify = Verification.objects.get(code = sendcode)
 
         if (verify.expires_at > timezone.now()):
-            user = verify.id_user
+            user = verify.user
             verify.delete()
             is_success = True
+
+            if (user.is_active == False):
+                user.is_active = True
+                user.save()
+
             data_token = {
                 "user_id": user.id,
                 "exp": timezone.now() + timedelta(days=1) 

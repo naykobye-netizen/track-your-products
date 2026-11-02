@@ -9,9 +9,10 @@ class User(AbstractUser):
         blank=True,
         null=True
     )
+    is_active = models.BooleanField(default=False)
 
 # Verification codes for user registration and login
 class Verification(models.Model):
-    id_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     code = models.IntegerField()
     expires_at = models.DateTimeField()
