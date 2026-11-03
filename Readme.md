@@ -12,6 +12,7 @@ Full-Stack system designed for product price tracking, analysis, and monitoring 
 
 ### Frontend
 - **Next.js** — React framework for server rendering and routing.
+- **js-cookie** — Lightweight client-side library for managing browser cookies with a simple, developer-friendly API.
 - *(Additional client-side technologies to be defined)*
 
 ### Artificial Intelligence

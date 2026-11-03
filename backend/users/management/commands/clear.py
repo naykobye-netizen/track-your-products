@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
-from users.models import User, Verification
 from django.utils import timezone
+
+from users.models import Verification
 
 # This command allows for the periodic cleanup of the user verification database, removing incorrectly registered users and unused verifications
 class Command(BaseCommand):

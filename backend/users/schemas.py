@@ -1,6 +1,4 @@
 from ninja import Schema
-from datetime import datetime, timedelta, timezone
-from django.conf import settings
 
 # User registration payload
 class RegisterSchema(Schema):
@@ -8,8 +6,8 @@ class RegisterSchema(Schema):
     email: str
     password: str
 
-# Response to user registration
-class ResponseSchema(Schema):
+# Response to user auth
+class ResponseAuthSchema(Schema):
     success: bool
     error: str
 
@@ -17,3 +15,9 @@ class ResponseSchema(Schema):
 class LoginSchema(Schema):
     username: str
     password: str
+
+# Response to user Verification
+class ResponseVerificationSchema(Schema):
+    success: bool
+    token: str
+    error: str

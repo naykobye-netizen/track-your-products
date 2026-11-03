@@ -1,9 +1,8 @@
 import environ
 import os
-from pathlib import Path
-import certifi # Remove in production
+import certifi
 
-os.environ['SSL_CERT_FILE'] = certifi.where() # Remove in production
+os.environ['SSL_CERT_FILE'] = certifi.where()
 
 env = environ.Env(
     DEBUG=(bool, True)

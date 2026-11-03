@@ -4,5 +4,5 @@ from users.api import api
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('users/', api.urls)
+    path('auth/', api.urls)
 ]
