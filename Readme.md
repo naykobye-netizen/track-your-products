@@ -22,7 +22,7 @@ Full-Stack system designed for product price tracking, analysis, and monitoring 
 
 The database architecture is designed to handle users, product tracking, price histories, and AI vectors:
 
-![Entity-Relationship Diagram](./docs/Entity-relationship-diagram_track_product.png)
+![Entity-Relationship Diagram](./docs/track-your-products-relational-entity.png)
 
 ### Schema Overview:
 - **User & Verification**: Registration, login, and email verification history.
