@@ -1,22 +1,31 @@
 # Track Your Products
 
-Full-Stack system designed for product price tracking, analysis, and monitoring in real time, featuring personalized alerts and advanced AI capabilities.
+Full-stack system designed for real-time product price tracking, analysis, and monitoring, featuring personalized alerts and advanced AI capabilities.
 
 ## Technologies
 
 ### Backend
-- **Python 3.15** & **Django / Django Ninja** — Fast, asynchronous, and typed REST API.
+- **Python** & **Django / Django Ninja** — Fast, asynchronous, and typed REST API.
 - **PyJWT** — Secure authentication via JSON Web Tokens.
-- **Postgres** — Relational database for persistence.
+- **PostgreSQL** — Relational database with `pgvector` support for AI workloads.
 - **Django Mail** — Transactional email delivery and verification codes.
 
 ### Frontend
 - **Next.js** — React framework for server rendering and routing.
-- **js-cookie** — Lightweight client-side library for managing browser cookies with a simple, developer-friendly API.
-- *(Additional client-side technologies to be defined)*
+- **js-cookie** — Lightweight client-side library for managing browser cookies.
 
-### Artificial Intelligence
+### Artificial Intelligence & Data
 - **Embeddings & Vector Search** — Vector storage (`Product_embedding`) for semantic search, recommendations, and product content analysis.
+
+---
+
+## Deployment
+- **Containerization**: Built with Docker and orchestrated via Docker Compose for production environments.
+- **Reverse Proxy Architecture**: Uses an isolated Nginx container per project mapped to port 80, routing traffic dynamically to the internal frontend (`Next.js`) and backend (`Django`) services.
+- **Database Persistence**: Managed via a dedicated PostgreSQL container with `pgvector` extension and persistent volume storage.
+- **Environment Isolation**: Secure configuration through dedicated `.env` files and internal Docker bridge networks.
+
+---
 
 ## Data Model (Entity-Relationship Diagram)
 

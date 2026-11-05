@@ -1,0 +1,82 @@
+services:
+
+  # Nginx service
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: prod_track_products_nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - static_volume:/app/staticfiles
+      - media_volume:/app/mediafiles
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - prod-track-products
+
+  # DataBase service
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: prod_track_products_db
+    restart: always
+    env_file:
+      - ./backend/.env
+    volumes:
+      - pgtrackproductsdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - prod-track-products
+  
+  # Backend service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: prod_track_products_backend
+    restart: always
+    env_file:
+      - ./backend/.env
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/mediafiles
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+              python manage.py collectstatic --noinput &&
+              gunicorn core.wsgi:application --bind 0.0.0.0:8000 --workers 3"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - prod-track-products
+  
+  # Frontend service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: prod_track_products_frontend
+    restart: always
+    env_file:
+      - ./frontend/.env
+    depends_on:
+      - backend
+    networks:
+      - prod-track-products
+
+# Persistent information, so it isn't lost
+volumes:
+  pgtrackproductsdata:
+  static_volume:
+  media_volume:
+
+# Private network between containers for communication
+networks:
+  prod-track-products:
+    driver: bridge
