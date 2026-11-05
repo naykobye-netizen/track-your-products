@@ -15,7 +15,7 @@ Full-stack system designed for real-time product price tracking, analysis, and m
 - **js-cookie** — Lightweight client-side library for managing browser cookies.
 
 ### Artificial Intelligence & Data
-- **Embeddings & Vector Search** — Vector storage (`Product_embedding`) for semantic search, recommendations, and product content analysis.
+- **Embeddings & Vector Search** — Vector storage (`Summary_embedding`) into the Product Model for semantic search, recommendations, and product content analysis.
 
 ---
 
