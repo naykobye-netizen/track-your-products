@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'ninja',
     'users.apps.UsersConfig',
+    'products.apps.ProductsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
