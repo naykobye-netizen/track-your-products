@@ -2,6 +2,7 @@ from django.db import models
 from pgvector.django import VectorField
 from users.models import User
 
+# Product model
 class Product(models.Model):
     name = models.CharField(max_length=30)
     url = models.CharField(max_length=200, unique=True)
@@ -14,12 +15,20 @@ class Product(models.Model):
     summary = models.CharField(max_length=300)
     summary_embedding = VectorField(dimensions=1536)
 
+# Product model that the user has added
 class User_Product(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     target_price = models.IntegerField()
     review = models.CharField(null=True, max_length=300)
 
+    # Prevent the user from adding the same product twice.
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'product'], name='unique_user_product')
+        ]
+
+# Product change history
 class History_Price(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     now_price = models.IntegerField()
