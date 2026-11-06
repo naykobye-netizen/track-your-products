@@ -18,6 +18,8 @@ DEBUG = env("DEBUG", default=True)
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
+print(ALLOWED_HOSTS)
+
 INSTALLED_APPS = [
     'pgvector',
     'corsheaders',
@@ -112,9 +114,13 @@ DEFAULT_FROM_EMAIL = f"Track your products <{EMAIL_HOST_USER}>"
 
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
 
+print(CORS_ALLOWED_ORIGINS)
+
 CSRF_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_SECURE = not DEBUG
 
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
+
+print(CSRF_TRUSTED_ORIGINS)
 
 AUTH_USER_MODEL = "users.User"
