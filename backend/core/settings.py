@@ -16,7 +16,7 @@ SECRET_KEY = env("SECRET_KEY", default="djangokeysecretedefaultcode93")
 
 DEBUG = env("DEBUG", default=True)
 
-ALLOWED_HOSTS = ["localhost"]
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
 INSTALLED_APPS = [
     'pgvector',
