@@ -1,5 +1,4 @@
 from django.db import models
-from pgvector.django import VectorField
 from users.models import User
 
 # Product model
@@ -11,6 +10,7 @@ class Product(models.Model):
     min_price = models.IntegerField()
     avg_price = models.IntegerField()
     max_price = models.IntegerField()
+    at_register = models.DateField()
 
 # Product model that the user has added
 class UserProduct(models.Model):
@@ -18,6 +18,7 @@ class UserProduct(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     target_price = models.IntegerField()
     review = models.CharField(null=True, max_length=300)
+    at_created_review = models.DateTimeField(null=True)
 
     # Prevent the user from adding the same product twice.
     class Meta:
@@ -35,31 +36,3 @@ class HistoryPrice(models.Model):
     change_percentage = models.IntegerField()
     in_stock = models.BooleanField()
     date = models.DateField()
-
-# Embedding associated with a product
-class ProductEmbedding(models.Model):
-    product = models.OneToOneField(
-        'Product',
-        on_delete=models.CASCADE,
-        related_name='embedding'
-    )
-
-    summary = models.TextField()
-    embedding = VectorField(dimensions=1536)
-
-    model_embedding = models.CharField(max_length=100)
-    updated_at = models.DateTimeField(auto_now=True)
-
-
-# Embedding associated with a user product review
-class ReviewEmbedding(models.Model):
-    user_product = models.OneToOneField(
-        UserProduct,
-        on_delete=models.CASCADE,
-        related_name='review_embedding'
-    )
-
-    embedding = VectorField(dimensions=1536)
-    model_embedding = models.CharField(max_length=100)
-    updated_at = models.DateTimeField(auto_now=True)
-

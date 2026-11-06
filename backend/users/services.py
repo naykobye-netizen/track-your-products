@@ -91,7 +91,7 @@ def register_service(payload: RegisterSchema):
         with transaction.atomic(): # If it fails, everything is cancelled.
             check_user = is_exist(payload.username, payload.email)
             if check_user:
-                if check_user.is_active == False:
+                if check_user.is_actived == False:
                     check_user.delete()
                 else:
                     return {
@@ -133,8 +133,8 @@ def verificate_service(sendcode):
             verify.delete()
             is_success = True
 
-            if user.is_active == False:
-                user.is_active = True
+            if user.is_actived == False:
+                user.is_actived = True
                 user.save()
 
             data_token = {
@@ -161,9 +161,12 @@ def login_service(payload: LoginSchema):
     if User.objects.filter(username = payload.username).exists():
         user = User.objects.get(username = payload.username)
 
-        if check_password(payload.password, user.password):
-            create_verification(user)
-            is_success = True
+        if (user.is_actived == True):
+            if check_password(payload.password, user.password):
+                create_verification(user)
+                is_success = True
+        else:
+            message_error = "El usuario no esta activado"
 
     if not is_success:
         message_error = "El usuario o contraseña son incorrectas"

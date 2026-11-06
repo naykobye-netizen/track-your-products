@@ -9,7 +9,7 @@ class User(AbstractUser):
         blank=True,
         null=True
     )
-    is_active = models.BooleanField(default=False)
+    is_actived = models.BooleanField(default=False)
 
 # Verification codes for user registration and login
 class Verification(models.Model):
